@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  style.
+    .dw_test{display:inline-block; margin:5px;background:green;color:#fff;padding:5px;}
+    p{color:blue}
+    .testblock{width:400px; background:#eee; height:200px; float:left;
+    position: relative;
+     margin:10px;border:1px solid #222};
+    h1{width:50px;height:50px; background:yellow;}
+    button{bottom:0;position: absolute;left:0;}
+  #main
+    div.testblock
+      component#left component1
+      button#b1 左边加载
+    div.testblock
+      component#left2 component2
+      button#b2 右边加载
+    div(style="clear:both")
+    h1#cmpt test
+    
+    
+  script(src='/javascripts/jquery_test.js')
+

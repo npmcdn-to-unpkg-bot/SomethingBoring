@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  style.
+    .dw_test{display:inline-block; margin:5px;background:green;color:#fff;padding:5px;}
+    p{color:blue}
+
+  #main
+    pre#dw_vue_pre.
+      <div id="demo">
+        <p>hello {{Date.now()}}========={{message}} {{count}} =========</p>
+      </div>
+
+
+  script(src='/javascripts/lib/vue1.26.js')
+  script(src='/javascripts/vue_test.js')
+

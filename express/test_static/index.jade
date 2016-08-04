@@ -1,0 +1,20 @@
+extends layout
+
+block content
+  style.
+    .dw_test{display:inline-block; margin:5px;background:green;color:#fff;padding:5px;}
+    p{color:blue}
+  #vue_warp
+    vue_test
+  #main
+  h1 PDF测试
+  h2 表格
+  table#table(border=0)
+    tr
+      td 姓名
+      td 年龄
+    tr
+      td 张三
+      td 12
+  script(src='/javascripts/test.js')
+
