@@ -1,9 +1,10 @@
 doctype html
 html
   head
-    title= title
+    title
     meta(name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no")
     link(rel='stylesheet', href='/stylesheets/style.css')
-    script(src='/javascripts/jquery-2.2.3.min.js')
   body
     block content
+    script(src='/javascripts/jquery-2.2.3.min.js')
+    script(src='/javascripts/test/#{path}.js')
