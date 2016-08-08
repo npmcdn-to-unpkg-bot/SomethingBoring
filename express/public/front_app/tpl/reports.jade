@@ -1,0 +1,51 @@
+//-COMPONENT main
+p
+.row(style='margin-bottom:10px;')
+  .col-sm-12
+    ul.nav.nav-tabs
+      li.active
+        a(href='#reports') 小B用户报表
+      li
+        a(href='#reports/bprize') 小B发券报表
+      li
+        a(href='#reports/redpacket') 红包报表
+      li
+        a(href='#reports/wifi') wifi万能钥匙报表
+      li
+        a(href='#reports/onlinePrizesByCity') 线上券城市纬度报表
+      li
+        a(href='#reports/onlinePrizesByOneDay') 线上券当日新增报表
+.row(style='margin-bottom:10px;')
+  .col-sm-6.dw_toolbar_select_addr
+    component select_city
+    component select_market
+    component select_btn
+  .col-sm-6
+    component select_six_date
+component table
+component paging
+button.btn.btn-default.dw_export 数据导出
+
+//-COMPONENT table
+table.dw_table.table.table-hover.table-bordered.table-striped
+  thead
+    tr
+      th.text-center 日期
+      th.text-center 城市
+      th.text-center 商场
+      th.text-center 商户账号总数
+      th.text-center 日新增商户注册帐号数
+  tbody
+    each val,i in data
+      tr
+        td=val.statDate
+        td(cityId=val.cityId)=val.cityName
+        td(marketId=val.marketId)=val.marketName
+        td=val.uSumCount
+        td=val.uDayCount
+
+//-COMPONENT select_six_date
+each v,k in data
+  label.btn.btn-primary(commond=k)
+    input(type='radio', autocomplete='off')
+    |#{v}

@@ -1,0 +1,71 @@
+html, body{height: 100%}
+a{cursor: pointer;}
+
+.dw_topNav{
+	background: #363c41; position: fixed;top:0;left:0;z-index: 1000; width: 100%; 
+}
+#main{min-height: 90%;min-width: 220px}
+.dw_table_wrap{min-height: 50%;position: relative;}
+component{display: none}
+.dw_topNav, .dw_topNav a{color:#ccc}
+.dw_topNav a:hover{color: #fff;}
+.dw_topNav, .dw_topNav_left, .dw_topNav_right{height: 30px;line-height: 30px}
+.dw_topNav_left a{display: inline-block;height: 100%}
+.dw_topNav_left img{max-height: 100%; max-width:100%;}
+.dw_topNav_right{float: right;}
+.table_loading{position: absolute;z-index: 999; background: #fff;text-align: center;font-size: 20px;
+ opacity: .5;top: 0;bottom: 0;height: 0;right: 0;width: 100%;height: 100%;margin:auto;  display: none}
+
+.dw_login{height: 100%; z-index: 1001; position: fixed; background: #fff;width: 100%;top:0;left:0;}
+.dw_login_box{ width:100%; max-width: 500px;z-index: 1000;background: #eee;padding: 15px;
+	border-radius: 5px;position: absolute;margin: auto; right:0;top:20%;left:0;}
+.dw_leftMenu{position: fixed;width:200px;left: 0;top:30px;bottom: 0;background: #428bca;z-index: 998}
+.dw_main{margin-left: 215px; padding-left:0;padding-top:30px;position: relative;min-width: 790px }
+
+#app_tip{position: fixed;top:0;bottom: 0;  display: none;width:auto; z-index: 3000;
+  padding: 0 10px;height: 50px;line-height: 50px; color: #fff; font-weight: bold; font-size: 16px;
+margin:auto; text-align: center;background: dodgerblue; }
+.dw_leftMenu .nav-pills>li{margin-top: 0}
+.dw_leftMenu .nav-pills>li>a{border-radius: 0; color: #fff}
+.dw_leftMenu .nav-pills>li.active>a{background: #fff;color: #428bca}
+.dw_leftMenu .nav-pills>li>a:hover{background: #eee;color: #428bca}
+a.dw_yellow_link{background-color: #bd7435;}
+a.dw_changestatus[disabled], a.dw_changesbind[disabled]{background: #777;
+  color:#fff;border-radius: 3px;padding:2px;}
+.dw_table{margin-bottom: 6px!important;}
+.dw_table img{height: 60px;display: block;}
+.dw_toolbar_select_addr>div, .dw_inline_block>div{display: inline-block;margin-right: 5px}
+.dw_small_btn_tags>.btn{margin:1px}
+.dw_modal_addr>.btn-group{margin:5px}
+.dw_radio_label>label{margin:5px}
+.dw_btn-uplaod-file{position: relative;}
+.dw_btn-uplaod-file input{position: absolute; top:0; left:0;width: 100%; height: 100%;opacity: 0;}
+.phoneview{width:320px;height:480px;background:url(/public/img/channelShakeIphone.jpg) no-repeat;
+  background-size:contain;overflow:hidden;}
+.phoneview_body{margin:288px 45px 0; overflow:hidden;}
+.phoneview-img-show{width:60px;height:60px;overflow:hidden;float:left;}
+.phoneview-img-show>img{width:60px;height:60px;}
+.phoneview-title {height:60px;color:#a3a3a3;float:left;text-indent:10px;line-height:30px;}
+.phoneview-title>p{font-size:14px;margin:0;}
+/*zhaomingchun*/
+.col-width{width: 13%}
+.form_c-width{display: inline-block;width: 170px;}
+#filter-redPacket-list .form-group { margin-right: 15px;margin-top: 15px;}
+.list-opt-but {display: block; width: 50px;margin: 0 auto 0px;padding: 0 10px;height: 24px;line-height: 24px;font-size: 12px;color: #5e626b;border: 1px solid #cbccce;border-radius: 4px;cursor: pointer;white-space: nowrap;}
+.redPacket_change .form-group .form-control { height: 90px;margin-top: 15px;width: 87%;line-height: 0;display: block;}  
+.item-controlBox .btn-success {border-color: #80bd3c;color: #80bd3c;}
+.item-controlBox .btn-success:hover {background-color: #80bd3c;color: #fff}
+.item-controlBox .btn {padding: 10px 12px;margin-right: 10px;background: none;}
+.item-controlBox .btn-danger:hover {background-color: #f13b78;color: #fff}
+.item-controlBox .btn-danger {border-color: #f13b78;color: #f13b78;}
+.item-controlBox .btn {padding: 10px 12px;margin-right: 10px;background: none;}
+td a{ text-decoration:none}
+.redPacket_change .form-group { margin-bottom: 15px;}
+.redPacket_change .form-group .radio{display: block;}
+.redPacket_change .form-group .col-sm-11{float: none;}
+.mgn-width{margin-left:10px }
+.dw_inline{display: inline-block;width: 19%;}
+.dw_inline_div{ display: inline-block;margin:1px;padding:8px;
+  background:ghostwhite;width: 19%;cursor: pointer;}
+.dw_inline_div span{margin-right: 3px}
+.dw_inline_div.on{background: #428bca;color:#fff;}

@@ -1,0 +1,129 @@
+//-COMPONENT main
+h3 活动管理
+hr
+.row(style='margin-bottom:10px')
+  .col-md-2
+  .col-md-10
+    .input-group(style="float:right")
+      component param_search
+.row(style='margin-bottom:10px;')
+  .col-xs-4
+  .col-xs-8
+    .dw_toolbar_select_addr
+      //-component activity_type
+      component activity_status
+      component bind_status
+      component select_btn
+component table
+hr
+component paging
+
+//-COMPONENT table
+table.dw_table.table.table-hover.table-bordered.table-striped
+  thead
+    tr
+      th.text-center 用户名
+      th.text-center 活动
+      th.text-center 渠道名称
+      th.text-center 商场/户名称
+      //-th.text-center 绑数/总数/绑定比例
+      th.text-center 状态操作
+      //-th.text-center beacon操作
+      th.text-center 活动操作
+  tbody
+    each val in data
+      tr(modelId=val.activityId activityStatus=val.activityStatus)
+        td=val.username
+        td(align="left")
+          span.badge.pull-right #{val.activityStatus}
+          p 名称: #{val.activityName}
+          p ID: #{val.activityId}
+          
+        td
+          p （#{val.channelIdeaId}）#{val.channelIdeaName}
+        td=val.relationName
+        //-td 
+          span #{val.bindingNum}/#{val.beaconTotalNum} 
+          br
+          span #{val.rate}
+        td
+          p
+            a.btn-link.dw_changestatus(data-status=2) 暂停
+          p
+            a.dw_changestatus(data-status=0) 准备中
+          p
+            a.dw_changestatus(data-status=1) 进行中
+        td.dw_small_btn_tags
+          a.btn.btn-sm.btn-info.dw_modify 修改
+          -if(val.isNationActivity)
+            a.btn.btn-sm.btn-primary.dw_set_channels(href="#activitys/#{val.activityId}/set_channels?bind_status=3") 设置渠道
+//-COMPONENT modal
+.modal-dialog
+  .modal-content
+    .modal-header
+      button.close(type='button', data-dismiss='modal', aria-label='Close')
+        span(aria-hidden='true') ×
+      h4.modal-title 活动信息修改
+    .modal-body
+      .form-horizontal
+        .row
+          .col-sm-12
+            .form-group
+              label.col-sm-3.control-label * 活动名称：
+              .col-sm-9
+                input.form-control(type='text', required='true', name='activity_name' value=data.activity_name)
+            .form-group
+              label.col-sm-3.control-label * 活动日期：
+              .col-sm-4
+                .input-group
+                  span.input-group-addon
+                    span.glyphicon.glyphicon-calendar
+                  input.form-control.datetimepicker.valid(name='start_date', maxlength='10', data-date-format='yyyy-mm-dd', data-autoclose='1', dateiso='true', type='text', value=data.start_date aria-invalid='false')
+              .col-sm-1(style='width:20px;padding-left:0px;')
+                label.control-label 至
+              .col-sm-4
+                .input-group
+                  span.input-group-addon
+                    span.glyphicon.glyphicon-calendar
+                  input.form-control.datetimepicker.valid(name='end_date', maxlength='10', data-date-format='yyyy-mm-dd', data-autoclose='1', dateiso='true', type='text', value=data.end_date aria-invalid='false')
+            .form-group
+              label.col-sm-3.control-label * 活动时间：
+              .col-sm-9
+                .form-inline
+                  .form-group(v-repeat='times', style='margin-left:0px;')
+                    .input-group.clockpicker(data-align='top', data-autoclose='true',  style='width:100px;')
+                      span.input-group-addon
+                        span.glyphicon.glyphicon-time
+                      input.form-control(type='text', name='start_time' value=data.start_time.substr(0,5))
+                    label&nbsp;&nbsp;至&nbsp;&nbsp;
+                    .input-group.clockpicker(data-align='top', data-autoclose='true', style='width:100px;')
+                      span.input-group-addon
+                        span.glyphicon.glyphicon-time
+                      input.form-control(type='text', name='end_time' value=data.end_time.substr(0,5))
+                  //-.form-group(style='margin-left:30px;', v-show='!modifyLimit.actTime')
+                    button.btn.btn-link(type='button', style='color: #d9534f;')
+                      span.glyphicon.glyphicon-remove
+                  .form-group(style='margin-left:30px; color:red; display:none;')
+                    span.glyphicon.glyphicon-info-sign
+                    |  时间不正确
+            .form-group
+              label.col-sm-3.control-label * 抽奖方式：
+              .col-sm-9
+                label
+                  input(type='radio' name="activity_channel" value=1 checked=data.activity_channel===1)
+                  |ticket抽奖
+                label
+                  input(type='radio' name="activity_channel" value=2 checked=data.activity_channel===2)
+                  |openID抽奖
+            .form-group
+              .col-sm-offset-2.col-sm-10
+                .checkbox
+                  label
+                    input(type='checkbox' name="is_nation_activity" value="1" checked=data.is_nation_activity===1)
+                    |是全国活动
+                  br
+                  small(style="color:#666") *可设置多个渠道(当前只用于红包和免核销的优惠券发放)
+
+    .modal-footer
+      button.btn.btn-default(type='button', data-dismiss='modal') 取消
+      button.btn.btn-primary.dw_modify 保存

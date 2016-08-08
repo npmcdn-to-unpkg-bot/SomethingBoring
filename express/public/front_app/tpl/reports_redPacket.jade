@@ -1,0 +1,79 @@
+//-COMPONENT main
+p
+.row(style='margin-bottom:10px;')
+  .col-sm-12
+    ul.nav.nav-tabs
+      li
+        a(href='#reports') 小B用户报表
+      li
+        a(href='#reports/bprize') 小B发券报表
+      li.active
+        a(href='#reports/redpacket') 红包报表
+      li
+        a(href='#reports/wifi') wifi万能钥匙报表
+      li
+        a(href='#reports/onlinePrizesByCity') 线上券城市纬度报表
+      li
+        a(href='#reports/onlinePrizesByOneDay') 线上券当日新增报表
+.row(style='margin-bottom:10px;')
+  .col-md-12
+    .input-group(style="float:right")
+      component param_search
+.row(style='margin-bottom:10px;')
+  .col-md-8
+    .col-sm-6
+      .form-group.form-inline
+        label.small 开始时间:
+          .input-group
+            span.input-group-addon
+              span.glyphicon.glyphicon-calendar
+            input.form-control.datetimepicker.valid(name='start_date', maxlength='10', data-date-format='yyyy-mm-dd', data-autoclose='1', dateiso='true', type='text'  aria-invalid='false')
+    .col-sm-6
+      .form-group.form-inline
+        label.small 结束时间:
+          .input-group
+            span.input-group-addon
+              span.glyphicon.glyphicon-calendar
+            input.form-control.datetimepicker.valid(name='end_date', maxlength='10', data-date-format='yyyy-mm-dd', data-autoclose='1', dateiso='true', type='text'  aria-invalid='false')
+  .col-md-4.dw_toolbar_select_addr
+    component select_type
+    component select_status
+    component select_btn
+component table
+component paging
+button.btn.btn-default.dw_export
+  span.glyphicon.glyphicon-export
+  | 导出
+button.btn.btn-default.dw_export_detail(style="margin-left:10px")
+  span.glyphicon.glyphicon-export
+  | 红包领取明细表
+
+//-COMPONENT table
+table.dw_table.table.table-hover.table-bordered.table-striped
+  thead
+    tr
+      th.text-center 商场名称
+      th.text-center 活动id
+      th.text-center 活动名称
+      th.text-center 红包金额
+      th.text-center 计划发放红包数
+      th.text-center 计划发放总金额
+      th.text-center 领取总金额
+      th.text-center 领取红包数
+      th.text-center 领取人数
+      th.text-center 余额
+      th.text-center 页面展示数量
+  tbody
+    each val,i in data
+      tr
+        td=val.market_name
+        td=val.activity_id
+        td=val.activity_name
+        td=val.prize_price
+        td=val.prize_num
+        td=val.plan_total_money
+        td=val.get_total_money
+        td=val.get_prize_num
+        td=val.get_person_num
+        td=val.balance
+        td=val.page_pv

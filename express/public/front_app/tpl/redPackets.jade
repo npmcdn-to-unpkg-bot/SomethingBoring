@@ -1,0 +1,176 @@
+//-COMPONENT main
+h3 红包管理
+hr
+.row(style='margin-bottom:10px;')
+  .col-md-12
+    .input-group(style="float:right")
+      component param_search
+.row(style='margin-bottom:10px;')
+  .col-xs-12
+    .dw_toolbar_select_addr
+      component select_city
+      component select_market
+      component select_shop
+      span(style='margin-right:1em')
+      component select_status
+      component select_btn
+.row(style='margin-bottom:10px;')
+  .col-md-12
+    .btn-group
+      button.btn.btn-default.btn-sm.dropdown-toggle(data-toggle="dropdown" aria-haspopup="true" aria-expanded="true")
+        |批量操作
+        span.caret
+      ul.dropdown-menu
+        li
+          a.dw_batch(data-status=2) 审核通过
+        li
+          a.dw_batch(data-status=5) 驳回
+component table
+hr
+component paging
+
+//-COMPONENT table
+table.dw_table.table.table-hover.table-bordered.table-striped
+  thead
+    tr
+      th.text-center
+        input(type="checkbox")
+      th.text-center 红包名称
+      th.text-center 店铺名称
+      th.text-center 图片
+      th.text-center 主标题/副标题
+      th.text-center 出券位置
+      th.text-center 红包数量及金额
+      th.text-center 状态
+      th.text-center 关注寻鹿
+      th.text-center 操作
+  tbody
+    -arr = ['商场','楼层','商铺']
+    -arr1 = ['投放中', '暂停','审核通过','已过期','待审核','驳回', '', '','','删除']
+    -arr2=['否','是']
+    each val in data
+      tr(v-class="checked?'itemPicked':''" )
+        td(scope="row")
+          input.item-checked(type="checkbox" data-id=val.prize_id)
+        td
+          p 名称：#{val.name}
+          p id：#{val.prize_id}
+          p 有效期：#{val.start_time}~#{val.end_time}
+        td
+          p 名称：#{val.provider_shop_name}
+          p 活动名称：#{val.activity_name}
+          p 活动ID：#{val.activity_id}
+        td
+          img(src=val.image_url)
+        td
+          p 主：#{val.main_info}
+          p 副：#{val.extend_info}
+        td
+          p #{arr[val.position_type]}
+        td
+          p 数量：#{val.num}个
+          p 金额：#{val.price}元
+          p 总金额：#{(val.num*val.price*100/100)}元
+        td(style="cursor: pointer;")
+          a(data-toggle="tooltip" title="审核人：#{val.auditor_name}<br/>时间：#{val.audit_time.substr(0,19)}<br/>操作：#{arr1[val.status]}" data-html="true" data-placement="top")
+            span.glyphicon.glyphicon-exclamation-sign
+            |#{arr1[val.status]}
+          br
+          small.reject_w(style="margin-top: 10px; color: crimson;") #{val.reject_reason}
+        td 
+          p=arr2[val.interest]
+        td.dw_small_btn_tags
+          -if(val.status==4)
+            a.btn.btn-success.btn-sm.dw_accsess(style="margin-top: 12px;" prize_id=val.prize_id) 通过
+            a.btn.btn-info.btn-sm.dw_modify(style="margin-top: 12px;" prize_id=val.prize_id) 修改
+          -if(val.status==4||val.status==2||val.status==1||val.status==0)
+            a.btn.btn-danger.btn-sm.dw_reject(style="margin-top: 12px;" prize_id=val.prize_id) 驳回
+
+//-COMPONENT modal
+.form-horizonta.redPacket_change
+  .modal-dialog(role="document")
+    .modal-content
+      .modal-header
+        button.close(type="button" data-dismiss="modal" aria-label="Close")
+          span(aria-hidden="true") &times
+        h4.modal-title 审核不通过
+      .modal-body
+        p 审核不通过原因：
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value=0 checked) 
+                |红包金额不足
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value=1) 
+                |文案违规
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value=2) 
+                |信息书写错误
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value=3) 
+                |图片问题
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value=4) 
+                |发放时间有问题
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value=5) 
+                |虚假信息
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value='custom') 
+                |自定义原因
+            input.form-control(type="text" name="audit_reason_content" disabled=!(data.audit_reason==='custom'))
+      .modal-footer
+          button.btn.btn-default(type="button" data-dismiss="modal") 取消
+          button.btn.btn-primary.dw_submit 确定
+      
+//-COMPONENT modify_modal
+.modal-dialog
+  .modal-content
+    .modal-header
+      button.close(type='button', data-dismiss='modal', aria-label='Close')
+        span(aria-hidden='true') &times
+      h4.modal-title 修改红包设置
+    .modal-body
+      input(type='hidden', name='id' value=data.prize_id)
+      p 红包名称：#{data.name}
+      p 有效期：#{data.start_time}~#{data.end_time}
+      div(style="border:1px solid #cccccc;width:60%;padding:  10px 0 5px 0")
+        p(style="padding-left:5px") 红包模式：
+          label.radio-inline
+            input(type='radio', name='red_plan', checked=data.red_plan===1 value='1')
+            |实时下单模式
+          label.radio-inline
+            input(type='radio', name='red_plan', checked=data.red_plan===2 value='2')
+            |预下单模式
+        p(style='color:red;padding-left:5px') 注意：修改为预下单模式，有效期跨度不能超过三天
+      div(style="border:1px solid #cccccc;width:60%;padding:  10px 0 5px 0;;margin-top:10px")
+        p(style="padding-left:5px") 默认关注：
+          label.radio-inline
+            input(type='radio', name='interest', checked=data.interest===0 value='0')
+            |  不关注寻鹿服务号
+          label.radio-inline()
+            input(type='radio', name='interest', checked=data.interest===1 value='1')
+            |  关注寻鹿服务号
+    .modal-footer
+        button.btn.btn-default(type="button" data-dismiss="modal") 取消
+        button.btn.btn-primary.dw_submit(type="button") 修改       

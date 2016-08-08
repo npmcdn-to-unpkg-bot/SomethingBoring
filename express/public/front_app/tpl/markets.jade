@@ -1,0 +1,242 @@
+//-COMPONENT main
+h3 商场/商户管理
+hr
+.row(style='margin-bottom:10px')
+  .col-md-2
+    .btn-group
+      button.btn.btn-default.dropdown-toggle(data-toggle="dropdown" aria-haspopup="true" aria-expanded="true")
+        span.glyphicon.glyphicon-plus(aria-hidden="true")
+        |&nbsp;创建&nbsp;
+        span.caret
+      ul.dropdown-menu
+        li
+          a.dw_add_Buser 商场帐号
+        li
+          a.dw_add_buser 商户帐号
+  //-搜索框
+  .col-md-10
+    .input-group(style="float:right")
+      component param_search
+
+.row(style='margin-bottom:10px;')
+  .col-xs-12
+    .dw_toolbar_select_addr
+      component select_status
+      component select_type
+      span(style='margin-right:1em')
+      component select_city
+      component select_market
+      component select_btn
+.dw_colletion 
+  component table
+.dw_paging
+  component paging
+
+//-COMPONENT table
+table.dw_table.table.table-hover.table-bordered.table-striped
+  thead
+    tr
+      th id
+      th 名字
+      th 类型
+      th 活动地点
+      th LOGO
+      th 联系方式
+      th 公众帐号ID
+      th 状态
+      th 操作
+  tbody
+    -tArr = ['', '商场','商户']
+    -sArr = ['正常','冻结']
+    each val in data
+      tr
+        td=val.id
+        td.text-center
+          =val.username
+          br
+          a.dw_get_sub(modelId=val.id) 子帐号#{val.subCount}个
+        td=tArr[val.type]
+        td #{val.city}-#{val.market}-#{val.shop}
+        td 
+          img(src=val.logo)
+        td=val.mobile
+        td=val.wechatId
+        td=sArr[val.status]
+        td(modelId=val.id).dw_small_btn_tags
+          button.btn.btn-info.btn-sm.dw_modify 编辑
+          button.btn.btn-danger.btn-sm.dw_delete 删除
+          case val.status
+            when 1
+              button.btn.btn-warning.btn-sm.dw_freeze(data-status=0) 解冻
+            when 0
+              button.btn.btn-default.btn-sm.dw_freeze(data-status=1) 冻结
+          br
+          button.btn.btn-primary.btn-sm.dw_carate_sub 建子帐号
+          -if(val.type==1 && val.haveDefaultActivity===0)
+            br
+            button.btn.btn-primary.btn-sm.dw_carate_activity 建活动
+
+//-COMPONENT main_modal
+.modal-dialog.modal-lg(role='document')
+  .modal-content
+    .modal-header
+      //-button.close(type='button', data-dismiss='modal', aria-label='Close')
+        span(aria-hidden='true') ×
+      h4#createModelLabel.modal-title #{data.id ? '修改': '创建'}#{data.level===2 ? '商户': '商场'}帐号
+    .modal-body.form-horizontal
+      .row
+        .col-sm-6(style='border-right:#ccc solid 1px;')
+          .form-group
+            label.col-sm-3.control-label(for='username') * 用户名:
+            .col-sm-9
+              input.form-control(type='text', name='username', required='true', placeholder='输入用户名', value=data.username)
+          .form-group
+            label.col-sm-3.control-label(for='password') * 密 码:
+            .col-sm-9
+              input.form-control(type='password', name='password', required='true', minlength='6', placeholder='输入密码')
+          .form-group
+            .col-sm-2
+            .col-sm-9.dw_modal_addr
+              component select_city
+              component select_market
+              -if(data.level===2)
+                component select_shop
+          br
+          .form-group
+            label.col-sm-3.control-label * LOGO:
+            .col-sm-4
+              .thumbnail
+                img#logo-pre-img-show(src=data.logo || '/public/img/df120.jpg')
+            .col-sm-5
+              input(type='hidden', name='logo_img', value='')
+              input(type='hidden', name='wechat_img', value='')
+              p 支持jpg/gif/png/jpeg格式,小于30kb
+              p 尺寸:200x200
+              p
+                button.btn.btn-default.dw_btn-uplaod-file(type="button")
+                  span.glyphicon.glyphicon-cloud-upload 上传logo
+                  input(type="file" name="img" id="dw_btn-upload-logo")
+          .form-group
+            label.col-sm-3.control-label(for='mobile') * 手机号:
+            .col-sm-9
+              input#mobile.form-control(type='text', name='mobile', required='true', placeholder='输入手机号', value=data.mobile)
+          .form-group
+            label.col-sm-3.control-label(for='phone') 座机:
+            .col-sm-9
+              input.form-control(type='text', name='phone', placeholder='输入座机', value=data.phone)
+          .form-group
+            label.col-sm-3.control-label(for='mail') * 邮箱:
+            .col-sm-9
+              input.form-control(type='text', name='mail', required='true', placeholder='输入邮箱', value=data.mail)
+        .col-sm-6
+          .form-group
+            label.col-sm-3.control-label 公众号二维码:
+            .col-sm-4
+              .thumbnail
+                img#qrcode-add-imgfile-show(src=data.qrCodeImg || '/public/img/df120.jpg')
+            .col-sm-5
+              p
+                button.btn.btn-default.dw_btn-uplaod-file(type="button")
+                  span.glyphicon.glyphicon-cloud-upload 上传二维码
+                  input(type="file" name="img" id="dw_btn-upload-qrCodeImg")
+          .form-group
+            label.col-sm-3.control-label(for='wechat_id') 公众帐号ID:
+            .col-sm-9
+              input.form-control(type='text', name='wechat_id', placeholder='输入微信公众帐号原始ID' value=data.wechatId)
+          .form-group
+            label.col-sm-3.control-label 微信公众号卡包URL:
+            .col-sm-9
+              p#md5_str(style='word-wrap:break-word;word-break:break-all;')=data.md5_str
+    .modal-footer(style='text-align:center;')
+      input#level(type='hidden', name='level', value=data.level)
+      button.btn.btn-default.dw_dismiss(type='button', data-dismiss='modal') 取消
+      button.btn.btn-primary.dw_submit 确定
+
+//-COMPONENT subaccount_list_modal
+.modal-dialog.subaccount-details(role='document')
+  .modal-content
+    .modal-header
+      button.close(type='button', data-dismiss='modal', aria-label='Close')
+        span(aria-hidden='true') ×
+      h4.modal-title 子账户列表
+    .modal-body
+      table.table
+        thead
+          tr
+            th 子用户名
+            th 手机号
+            th 所在城市
+            th 所在商场
+            th 所在商户
+            th 操作
+        tbody
+          each val in data
+            tr
+              td=val.username
+              td=val.mobile
+              td=val.city
+              td=val.market
+              td=val.shop
+              td
+                a.btn.btn-danger.btn-sm(modelId=val.id) 删除
+      //-nav.text-right
+        ul.pagination.subAccountPagination
+
+//-COMPONENT carate_subaccount_modal
+.modal-dialog.modal-lg(role='document')
+  .modal-content
+    .modal-header
+      button.close(type='button', data-dismiss='modal', aria-label='Close')
+        span(aria-hidden='true') ×
+      h4.modal-title 新建子帐户
+    .modal-body.form-horizontal
+      .row
+        .col-sm-10
+          .form-group
+            label.col-sm-3.control-label
+              span.form-control-require *
+              | 用户名称:
+            .col-sm-9
+              input.form-control(type='text', required='true', name='username', placeholder='请输入帐户名称')
+          .form-group
+            label.col-sm-3.control-label
+              span.form-control-require *
+              | 密码:
+            .col-sm-9
+              input.form-control(type='password', required='true', name='password', placeholder='请输入帐户密码')
+          .form-group
+            label.col-sm-3.control-label
+              span.form-control-require *
+              | 确认密码:
+            .col-sm-9
+              input.form-control(type='password', name="veifypass"  placeholder='再一次输入帐户密码')
+          .form-group
+            label.col-sm-3.control-label
+              span.form-control-require *
+              | 手机号:
+            .col-sm-9
+              input.form-control(type='text', required='true', name='mobile', mobile='true', placeholder='请输入手机号')
+          .form-group
+            label.col-sm-3.control-label(for='mail') 邮箱:
+            .col-sm-9
+              input.form-control(type='text', name='mail', email='true', placeholder='请输入邮箱', )
+          .form-group
+            label.col-sm-3.control-label
+              span.form-control-require *
+              | 功能权限:
+            .col-sm-9(style='height: 35px; line-height: 32px;')
+              label
+                input(type='checkbox', name='rights', value='3_0')
+                |  活动管理
+              label
+                input(type='checkbox', name='rights', value='5_0')
+                |  核销管理
+    .modal-footer
+      .row
+        .col-sm-12.text-center
+          button.btn.btn-primary.dw_submit
+            span.glyphicon.glyphicon-ok
+            |  保存
+          button.btn.btn-primary(type='button', data-dismiss='modal')
+            span.glyphicon.glyphicon-remove
+            |  取消

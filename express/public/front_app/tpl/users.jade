@@ -1,0 +1,107 @@
+//-COMPONENT main
+h3 账户管理
+hr
+.row(style='margin-bottom:10px')
+  //-创建
+  .col-md-2
+    .btn-group
+      button.btn.btn-default.dropdown-toggle.dw_add
+        span.glyphicon.glyphicon-plus(aria-hidden="true")
+        |&nbsp;新增用户&nbsp;
+  .col-md-6
+    component hybrid_search
+
+component table
+.dw_paging
+  component paging
+component modal
+
+//-COMPONENT modal
+.modal-dialog(role="document")
+  .modal-content
+    .modal-header
+      button.close(type="button" data-dismiss="modal" aria-label="Close")
+        span(aria-hidden="true") &times
+      h4.modal-title #{data.id ? '修改' :'新增'}用户
+    .modal-body
+      form.form-horizontal
+        .row
+          .col-sm-12(style="border-right:#ccc solid 1px;")
+            input(type='hidden' name="id" value=data.id)
+            .form-group
+              label.col-sm-3.control-label *用户名称 
+              .col-sm-9
+                input.form-control(type="text" required="true" name="username" placeholder="请输入用户名称" value=data.username)
+            .form-group
+              label.col-sm-3.control-label *真实姓名 
+              .col-sm-9
+                input.form-control(type="text" required="true" name="realname" placeholder="请输入真实姓名" value=data.realname)
+            .form-group
+              label.col-sm-3.control-label *密码 
+              .col-sm-9
+                input.form-control(type="password" required= !data.id ? true: false name="password" placeholder="请输入密码")
+            .form-group
+              label.col-sm-3.control-label *手机号码
+              .col-sm-9
+                 input.form-control(type="text" value=data.phone required="true" name="phone" placeholder="请输入手机号码" autocomplete)
+            .form-group
+              label.col-sm-3.control-label 电子邮箱 
+              .col-sm-9
+                input.form-control(type="text" name="email" placeholder="请输入电子邮箱" value=data.email autocomplete )
+            .form-group
+              label.col-sm-3.control-label 审核描述
+              .col-sm-9
+                textarea.form-control(style='height:60px' name="description")=data.description
+            .form-group
+              label.col-sm-3.control-label 用户权限
+              .col-sm-9
+                .col-sm-6
+                  .checkbox
+                    label
+                      input(type="checkbox" checked="ture" disabled="disabled" name="pageList" value="")
+                      span.small 首页(登陆后默认页)无法被取消
+
+                each v,k in app.ROUTE_CONF
+                  .col-sm-6
+                    .checkbox
+                      label
+                        -isChecked = data.pageList.indexOf(Number(k)) < 0 ? false : true
+                        input(type="checkbox" value=k  name="pageList" checked=isChecked )
+                        span.small=v.name
+    .modal-footer(style="text-align:center;")
+        button.btn.btn-default.dw_dismiss(data-dismiss="modal") 取消
+        button.btn.btn-primary.dw_submit 确定
+
+//-COMPONENT table
+table.dw_table.table.table-hover.table-bordered.table-striped
+  thead
+    tr
+      th.text-center 用户ID
+      th.text-center 用户名称
+      th.text-center 真实姓名
+      th.text-center 电子邮箱
+      th.text-center 手机号码
+      th.text-center 用户描述
+      th.text-center 用户权限
+      th.text-center 用户状态
+      th.text-center 操作
+  tbody
+    each val,i in data
+      tr
+        td=val.id
+        td=val.username
+        td=val.realname
+        td=val.email
+        td=val.phone
+        td=val.description
+        td.dw_small_btn_tags
+          each j in val.pageList
+            -if(app.ROUTE_CONF[j])
+              a(class="btn btn-xs btn-success" role="button")=app.ROUTE_CONF[j].name
+        td=val.status===1? '已冻结' : '正常'
+        td(modelId=val.id).dw_small_btn_tags
+          button.btn.btn-info.btn-sm.dw_modify 修改
+          -if(val.status!==1)
+            button.btn.btn-danger.btn-sm.dw_status(statusId=1) 冻结
+          -else
+            button.btn.btn-default.btn-sm.dw_status(statusId=0) 启用

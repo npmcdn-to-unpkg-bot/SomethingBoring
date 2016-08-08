@@ -1,0 +1,69 @@
+//-COMPONENT main
+p
+.row(style='margin-bottom:10px;')
+  .col-sm-12
+    ul.nav.nav-tabs
+      li
+        a(href='#reports') 小B用户报表
+      li.active
+        a(href='#reports/bprize') 小B发券报表
+      li
+        a(href='#reports/redpacket') 红包报表
+      li
+        a(href='#reports/wifi') wifi万能钥匙报表
+      li
+        a(href='#reports/onlinePrizesByCity') 线上券城市纬度报表
+      li
+        a(href='#reports/onlinePrizesByOneDay') 线上券当日新增报表
+.row(style='margin-bottom:10px;')
+  .col-sm-6.dw_toolbar_select_addr
+    component select_city
+    component select_market
+    component select_btn
+  .col-sm-6
+    component select_six_date
+component table
+component paging
+button.btn.btn-default.dw_export 数据导出
+
+//-COMPONENT table
+table.dw_table.table.table-hover.table-bordered.table-striped
+  thead
+    tr
+      th.text-center 日期
+      th.text-center 城市
+      th.text-center 商场
+      th.text-center 系统总数
+      th.text-center 当日新增数
+      th.text-center 审核通过
+      th.text-center 驳回
+      th.text-center 暂停
+      th.text-center 过期
+      th.text-center 删除
+      th.text-center 领取券数
+      th.text-center 领取人数
+      th.text-center 核销券数
+      th.text-center 核销人数
+  tbody
+    each val,i in data
+      tr
+        td=val.statDate
+        td(cityId=val.cityId)=val.cityName
+        td(marketId=val.marketId)=val.marketName
+        td=val.prizeSumCount
+        td=val.addDayCount
+        td=val.passCount
+        td=val.rejectCount
+        td=val.suspendCount
+        td=val.timeoutCount
+        td=val.delCount
+        td=val.receivedPrizeCount
+        td=val.receivedPersonCount
+        td=val.writeoffPrizeCount
+        td=val.writeoffPersonCount
+
+//-COMPONENT select_six_date
+each v,k in data
+  label.btn.btn-primary(commond=k)
+    input(type='radio', autocomplete='off')
+    |#{v}

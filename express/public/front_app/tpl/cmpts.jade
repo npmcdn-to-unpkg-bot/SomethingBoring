@@ -1,0 +1,84 @@
+//-COMPONENT login
+.dw_login_box.form-horizontal
+  h3.text-center 营销平台admin登录
+  hr
+  .form-group
+    label.col-sm-2.control-label(for='inputUser') 用户名
+    .col-sm-10
+      input#inputUser.form-control(type='text' required="required")
+  .form-group
+    label.col-sm-2.control-label(for='inputPassword' required="required") 密码
+    .col-sm-10
+      input#inputPassword.form-control(type='password')
+  .form-group
+    .col-sm-offset-2.col-sm-10
+      button.btn.btn-default.pull-right 确定
+
+//-COMPONENT top_nav
+.row
+  .col-md-4.col-xs-6.col-sm-4.dw_topNav_left
+    a(href="#")
+      img(src="/public/img/logo.png")
+  .col-md-8.col-xs-6.col-sm-8
+    .dw_topNav_right
+      -if(!isLogin)
+        a(href="#login") 登录
+      -else
+        span=user.username
+        a(onclick="app.util.logout()" style="margin-left:1em") [注消]
+
+//-COMPONENT left_menu
+ul.nav.nav-pills.nav-stacked
+  li
+    a(href="#") 首页
+  each val in list
+    li(class=(indexKey===val.route) ? active : '' )
+      -if(val.route)
+        a(href="##{val.route}")=val.name
+      -else
+        a(href=val.url  target="_blank" ).dw_yellow_link=val.name
+
+//-COMPONENT paging
+nav.pull-right
+  ul.pagination(style='margin-top:10px')
+    li(class= index<=1 ? 'disabled' : 'dw_pagging_prev')
+      a(aria-label='Previous')
+        span(aria-hidden='true') 上一页
+    li(class= index<=1 ? 'active' : 'dw_pagging_com')
+      a 1
+    li(class= pre_ellipsis)
+      a ...
+
+    -for(;i < len2; i++)
+      li(class= index===i ? 'active' : 'dw_pagging_com')
+        a=i
+
+    li(class= next_ellipsis)
+      a ...
+    -if(max>1)
+      li(class= index===max ? 'active' : 'dw_pagging_com')
+        a=max
+    li(class= index===max ? 'disabled' : 'dw_pagging_next')
+      a(aria-label='Next')
+        span(aria-hidden='true') 下一页
+
+//-COMPONENT index
+<h1>欢迎!</h1>
+
+//-COMPONENT notFound
+<h1>404 Not Found</h1>
+
+//-COMPONENT navTabs
+ul.nav.nav-tabs
+  li.active
+    a(href='#reports') 小B用户报表
+  li
+    a(href='#reports/bprize') 小B发券报表
+  li
+    a(href='#reports/redpacket') 红包报表
+  li
+    a(href='#reports/wifi') wifi万能钥匙报表
+  li
+    a(href='#reports/onlinePrizesByCity') 线上券城市纬度报表
+  li
+    a(href='#reports/onlinePrizesByOneDay') 线上券当日新增报表

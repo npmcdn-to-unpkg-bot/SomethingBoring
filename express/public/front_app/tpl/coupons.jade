@@ -1,0 +1,190 @@
+//-COMPONENT main
+h3 优惠券管理
+hr
+.row(style='margin-bottom:10px;')
+  .col-md-12
+    .input-group(style="float:right")
+      component param_search
+.row(style='margin-bottom:10px;')
+  .col-xs-12
+    .dw_toolbar_select_addr
+      component select_city
+      component select_market
+      component select_shop
+      span(style='margin-right:1em')
+      component select_status
+      component select_btn
+.row(style='margin-bottom:10px;')
+  .col-md-12
+    .btn-group
+      button.btn.btn-default.btn-sm.dropdown-toggle(data-toggle="dropdown" aria-haspopup="true" aria-expanded="true")
+        |批量操作
+        span.caret
+      ul.dropdown-menu
+        li
+          a.dw_batch(data-status=2) 审核通过
+        li
+          a.dw_batch(data-status=5) 驳回
+component table
+hr
+component paging
+
+//-COMPONENT table
+table.dw_table.table.table-hover.table-bordered.table-striped
+  thead
+    tr
+      th.text-center
+        input(type="checkbox")
+      th.text-center 优惠券名称
+      th.text-center 店铺名称
+      th.text-center 图片
+      th.text-center 主标题/副标题
+      th.text-center 出券位置
+      th.text-center 说明及条款
+      th.text-center 状态
+      th.text-center 操作
+  tbody
+    -arr = ['商场','楼层','商铺']
+    -arr1 = ['投放中', '暂停','审核通过','已过期','待审核','驳回', '', '','','删除']
+    each val in data
+      tr(v-class="checked?'itemPicked':''" )
+        td(scope="row")
+          input.item-checked(type="checkbox" data-id=val.prize_id)
+        td
+          p 名称：#{val.name}
+          p id：#{val.prize_id}
+          p 有效期：#{val.start_time}~#{val.end_time}
+        td
+          p 名称：#{val.provider_shop_name}
+          p 活动名称：#{val.activity_name}
+          p 活动ID：#{val.activity_id}
+        td
+          img(src=val.image_url)
+        td
+          p 主：#{val.main_info}
+          p 副：#{val.extend_info}
+        td
+          p #{arr[val.position_type]}
+        td
+          a.text-center(data-toggle="tooltip" title=val.desc_clause data-html="true" data-placement="top")
+            span.glyphicon.glyphicon-exclamation-sign
+            |查看
+        td(style="cursor: pointer;")
+          a(data-toggle="tooltip" title="审核人：#{val.auditor_name}<br/>时间：#{val.audit_time.substr(0,19)}<br/>操作：#{arr1[val.status]}" data-html="true" data-placement="top")
+            span.glyphicon.glyphicon-exclamation-sign
+            |#{arr1[val.status]}
+          br
+          small.reject_w(style="margin-top: 10px; color: crimson;") #{val.reject_reason}
+        td.dw_small_btn_tags
+          -if(val.status==4)
+            a.btn.btn-success.btn-sm.dw_accsess(style="margin-top: 12px;" prize_id=val.prize_id) 通过
+          -if(val.status==4||val.status==2||val.status==1||val.status==0)
+            a.btn.btn-danger.btn-sm.dw_reject(style="margin-top: 12px;" prize_id=val.prize_id) 驳回
+
+//-COMPONENT modal
+.form-horizonta.redPacket_change
+  .modal-dialog(role="document")
+    .modal-content
+      .modal-header
+        button.close(type="button" data-dismiss="modal" aria-label="Close")
+          span(aria-hidden="true") &times
+        h4.modal-title 审核不通过
+      .modal-body
+        p 审核不通过原因：
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value=0 checked) 
+                |虚假信息
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value=1) 
+                |文案违规
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value=2) 
+                |信息书写错误
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value=3) 
+                |图片问题
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value=4) 
+                |发放时间有问题
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value=5) 
+                |客户投诉
+        .form-group
+          .col-sm-offset-1.col-sm-11
+            .radio
+              label
+                input(type="radio" name="audit_reason" value='custom') 
+                |自定义原因
+            input.form-control(type="text" name="audit_reason_content" disabled=!(data.audit_reason==='custom'))
+
+
+      .modal-footer
+          button.btn.btn-default(type="button" data-dismiss="modal") 取消
+          button.btn.btn-primary.dw_submit 确定
+
+//-COMPONENT B_main
+component title
+component table
+component paging
+
+//-COMPONENT B_title
+h3 
+  span(style='margin-left:20px;font-size:.7em')
+    |活动名称：
+    b #{data.activityName}
+    span(style='margin-left:20px') 活动ID: 
+    b #{data.activityId} 
+
+//-COMPONENT B_table
+table.dw_table.table.table-hover.table-bordered.table-striped
+  thead
+    tr
+      th.text-center 优惠券信息
+      th.text-center 状态
+      th.text-center 类型
+      //-th.text-center 排期
+      th.text-center 发放数量
+      th.text-center 操作
+  tbody
+    -arr = ['折扣券','礼品券','代金券','广告券','优惠券','红包']
+    -arr1 = ['投放中', '暂停','审核通过','已过期','待审核','驳回', '', '','','删除']
+    each val in data
+      tr
+        td(scope="row")
+          |名称: #{val.name}
+          br
+          |id: #{val.id}
+          p 有效期：#{val.start_time} 至 #{val.end_time}
+        td #{arr1[val.status]}
+        td #{arr[val.coupon_type]}
+        td #{val.num}
+        td
+          -val.is_synchronized = val.is_synchronized || 0
+          case val.is_synchronized
+            when 0
+              button.dw_wx_sync.btn.btn-primary.btn-sm(modelId=val.id) 同步到微信卡券
+            when 1
+              |已同步
+            when 2
+              |微信审核未通过
+            when 3
+              |微信审核已通过
+

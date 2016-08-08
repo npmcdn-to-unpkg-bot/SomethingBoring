@@ -1,0 +1,57 @@
+//-COMPONENT select
+label=label
+.btn-group(style='float:none')
+  select.form-control
+    -if(def)
+      option(value='')=def
+    each v,i in option
+      -i = i[0]==='$' ? i.substr(1) : i
+      option(value=i)=v
+
+//-COMPONENT param_search
+.input-group-btn
+  select.selectpicker(data-width="fit")
+    each v,i in data
+      option=v
+input.form-control(type='text', aria-label='...')
+.input-group-btn
+  button.btn.btn-default.dw_search_btn 搜索
+
+//-COMPONENT queryString_search
+input.form-control(placeholder=(placeholder || "请输入名称/手机号/ID/邮箱"))
+span.input-group-btn
+  button.btn.btn-default 搜索
+
+//-COMPONENT select_city
+label 城市:
+select.selectpicker.show-tick(data-width="fit" data-live-search="true")
+  option 全部
+  each val,i in list
+    option(selected=(i===index)) #{val.name}
+
+//-COMPONENT select_market
+label 商场:
+select.selectpicker(data-width="fit" disabled=!city data-live-search="true")
+  option 全部
+  -if(city)
+    each val,i in list
+      option(selected=(i===index)) #{val.name}
+
+//-COMPONENT select_shop
+label 店铺:
+select.selectpicker(data-width="fit" disabled=!market data-live-search="true")
+  option 全部
+  -if(market)
+    each val,i in list
+      option(selected=(i===index)) #{val.name}
+
+//-COMPONENT new_select_city
+label=label
+select.selectpicker.show-tick(data-width="fit" data-live-search="true" name=name)
+  -if(first)
+    option(selected=(active_id===undefined) disabled=!notDisabled value=-1)=first
+  each val,i in list
+    option(selected=(active_id===val.id) value=val.id) #{val.name}
+
+//-COMPONENT select_btn
+button.btn.btn-default 筛选

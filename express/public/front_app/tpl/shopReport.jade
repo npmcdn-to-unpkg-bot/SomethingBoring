@@ -1,0 +1,42 @@
+h3 小B发券报表
+hr
+.row(style='margin-bottom:10px')
+  //-搜索框
+  .col-md-3
+    label 选择城市：
+    select.selectpicker.sel-width.form-control(style='width:65%')
+      option 所有城市
+  .col-md-3
+    label 选择商场：
+    select.selectpicker.sel-width.form-control(style='width:65%')
+      option 所有商场
+.row(style='margin-bottom:10px')
+  .col-md-2  
+    button.btn.btn-default() 今日
+    button.btn.btn-default(style="margin-left:15px;") 昨日
+  .col-md-4  
+    button.btn.btn-default() 本周
+    button.btn.btn-default(style="margin-left:15px;") 上周
+    button.btn.btn-default(style="margin-left:15px;") 本月
+    button.btn.btn-default(style="margin-left:15px;") 上月
+table.dw_table.table.table-hover.table-bordered.table-striped
+  thead
+    tr
+      th.text-center 日期
+      th.text-center 城市
+      th.text-center 商场
+      th.text-center 系统总数
+      th.text-center 当日新增
+      th.text-center 审核通过
+      th.text-center 驳回
+      th.text-center 暂停
+      th.text-center 审核通过
+      th.text-center 删除
+      th.text-center 领取券数
+      th.text-center 领取人数
+      th.text-center 核销券数
+      th.text-center 核销人数
+  tbody
+
+
+                               

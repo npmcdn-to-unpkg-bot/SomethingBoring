@@ -1,0 +1,212 @@
+//-COMPONENT main
+h3 渠道管理
+hr
+.row(style='margin-bottom:10px')
+  //-搜索框
+  .col-md-12
+    .input-group(style="float:right")
+      component param_search
+.row(style='margin-bottom:10px;')
+  .col-xs-4
+    //-.btn-group
+      button.btn.btn-default.btn-sm.dropdown-toggle(data-toggle="dropdown" aria-haspopup="true" aria-expanded="true")
+        |批量操作
+        span.caret
+      ul.dropdown-menu
+        li
+          a.dw_batch(data-status=1) 审核通过
+        li
+          a.dw_batch(data-status=2) 驳回
+  .col-xs-8
+    .dw_toolbar_select_addr
+      component bind_status
+      component select_status
+      component select_btn
+component table
+hr
+component paging
+component rejectModal
+component modifyModal
+
+//-COMPONENT table
+table.dw_table.table.table-hover.table-bordered.table-striped(style="margin-top:15px")
+  thead
+    tr
+      //-th.text-center
+        input(type="checkbox")
+      th.text-center 名称
+      th.text-center 图片
+      th.text-center 主/副标题
+      th.text-center 商场/店铺名称
+      th.text-center 渠道内活动
+      th.text-center 状态
+      th.text-center 优先级模式
+      th.text-center 渠道状态
+      th.text-center 绑Beacon
+      th.text-center 绑数/总数
+      th.text-center(style='width:100px') beacon操作
+      th.text-center 操作
+      th.text-center 操作记录
+  tbody 
+    -arr = ['未审核','审核通过','驳回']
+    -modelArr = ['优选级顺延','高优先独占'] 
+    -channelArr = ['暂停','已启用']
+    -beaconArr = ['否','是']
+    -levelArr = ['','高','中','低']
+    each val in data
+      tr(modelId=val.id)
+        //-td(scope="row")
+          input.item-checked(type="checkbox" data-id="#{val.id}")
+        td(align:left) ID:#{val.id}<br> 名称:#{val.name}
+        td
+          p
+            img.img-rounded(src="#{val.picture_path}"  style="max-width:60px;") 
+        td #{val.main_title} <br>
+           small #{val.sub_title}
+        td #{ val.user_level == 1 ? val.market_name : ( val.user_level == 2 ? val.shop_name : '') }<br/>
+          small (用户：#{val.username})
+        td
+          each v2 in val.activityList
+            small (#{v2.activityId})(#{levelArr[v2.priority_level]})#{v2.activity_name}
+            br
+        td 
+          p #{arr[val.status]}
+          -if(val.status==2)
+            small
+              |原因:
+              span(style='color:red') #{val.reject_reason}
+        td=modelArr[val.priority_mode]
+        td=channelArr[val.channel_status]
+        td=beaconArr[val.bind_type]
+        td #{val.bindingNum}/#{val.beaconTotalNum}
+        td
+          div
+            p
+              a.dw_refresh_bind.btn-link(data-build_id=val.build_id) 刷新beacon
+            p
+              a.dw_changesbind.btn-link 手动绑定
+            p
+              a.dw_changesunbind.btn-link 解绑
+            p
+              a(href="#channels/#{val.id}/beacons").dw_high_bind 高级绑定
+
+
+         td.dw_small_btn_tags(modelId=val.id)
+          -if(val.status==0)
+            a.btn.btn-success.btn-sm 通过
+            a.btn.btn-danger.btn-sm 驳回
+          a.btn.btn-info.btn-sm.dw_modify 修改
+        td #{val.operator_name}
+          br
+          span(data-toggle="tooltip" data-placement="bottom" title="#{val.operation_time || val.fopTime}")  #{ val.operation_time || val.fopDate }
+
+//-驳回
+//-COMPONENT rejectModal
+.modal-dialog.form-horizontal
+  .modal-content
+    .modal-header
+      button.close(type="button" data-dismiss="modal" aria-label="Close")
+        span( aria-hidden="true") &times
+      h4.modal-title 驳回
+    .modal-body
+      .form-group
+        label.col-sm-2.control-label(for="comment") 理由:
+        .col-sm-10
+          input.form-control(type="text" name="comment" placeholder="驳回原因")
+    .modal-footer
+        button.btn.btn-default(type="button" data-dismiss="modal") 关闭
+        button.btn.btn-primary(type="button") 驳回
+
+//-修改
+//-COMPONENT modifyModal
+.modal-dialog.modal-lg(role="document")
+  .modal-content
+    .modal-header
+      button.close(type="button"  data-dismiss="modal" aria-label="Close") 
+        span(aria-hidden="true") &times
+      h4.modal-title#createChannelModalLabel 修改渠道创意
+    .modal-body
+      .row
+        .col-sm-7.form-horizontal
+          .form-group
+            label.col-sm-3.control-label(for="name") 名称:
+            .col-sm-9
+              input.form-control(type="text" name="name" placeholder="请输入渠道名称。" required="true" maxlength="20"  autocomplete value=data.name)
+          //-.form-group
+            label.col-sm-3.control-label(for="name") 渠道:
+            .col-sm-9
+              -channelList=_.pluck(data.channelList,'id')
+              span
+                label
+                  input(type="checkbox" checked=channelList.indexOf(1)!==-1 value=1  name="channel_ids")
+                  |微信摇一摇
+              span(style="margin-right:5px")
+              span
+                label
+                  input(type="checkbox" checked=channelList.indexOf(2)!==-1 value=2 name="channel_ids")
+                  |360摇一摇
+          .form-group
+            label.col-sm-3.control-label(for="main_title") 主标题:
+            .col-sm-9
+              input.form-control( type="text"  name="main_title" placeholder="最多6个汉字" maxlength="6" required="true" value=data.main_title autocomplete)
+          .form-group
+            label.col-sm-3.control-label 副标题:
+            .col-sm-9
+              input.form-control( type="text" name="sub_title" placeholder="最多6个汉字" maxlength="6" required="true" value=data.sub_title  autocomplete)  
+          .form-group
+            label.col-sm-3.control-label 图标:
+            .col-sm-9.col-sm-offset-3
+              button.btn.btn-default.dw_btn-uplaod-file(type="button")
+                span.glyphicon.glyphicon-cloud-upload 上传图片
+                input(type="file" name="img" id="dw_btn-upload-file")
+            .col-sm-9.col-sm-offset-3
+                span 限制尺寸: 120px宽 x 120px高
+                span 格式支持(支持jpg/gif/png/jpeg格式,小于'+30+'kb)
+          input(type="hidden" name="id" value=data.id)
+
+          input(type="hidden" name="picture_path" value=data.picture_path)
+          input(type="hidden" name="wx_pic_url" value=data.wx_pic_url)
+          .form-group
+            .col-sm-11.col-sm-offset-1
+              label
+                input(type="radio" checked=data.pre_url_type===0 value='' data-type=0  name="pre_url_bind")
+                | ticket抽奖
+              br
+              .form-inline(style='margin-bottom:4px')
+                label
+                  input(type="radio" checked=(data.pre_url_type===1 && data.pre_url_xunlu_openid===data.pre_url_bind) value=data.pre_url_xunlu_openid data-type=1 name="pre_url_bind")
+                  small 寻鹿openid前置跳转：
+                input.form-control(type='text' name="pre_url_xunlu_openid" style='min-width:270px'  value=data.pre_url_xunlu_openid)
+              .form-inline(style='margin-bottom:4px')
+                label
+                  input(type="radio" checked=(data.pre_url_type===1 && data.pre_url_xunlu_getauth===data.pre_url_bind) value=data.pre_url_xunlu_getauth data-type=1 name="pre_url_bind")
+                  small 寻鹿openid并获取头像昵称前置跳转：
+                input.form-control(type='text' name="pre_url_xunlu_getauth"   value=data.pre_url_xunlu_getauth)
+              .form-inline(style='margin-bottom:5px')
+                label
+                  input(type="radio" checked=(data.pre_url_type===1 && data.pre_url_market_openid===data.pre_url_bind) value=data.pre_url_market_openid data-type=1 name="pre_url_bind")
+                  small B端客户openid前置跳转：
+                input.form-control(type='text' name="pre_url_market_openid" style='min-width:250px'  value=data.pre_url_market_openid)
+              .form-inline(style='margin-bottom:4px')
+                label
+                  input(type="radio" checked=(data.pre_url_type===1 && data.pre_url_phone===data.pre_url_bind) value=data.pre_url_phone data-type=1 name="pre_url_bind")
+                  small(style='margin-right:48px;') 手机号前置跳转：
+                input.form-control(type='text' name="pre_url_phone" style='min-width:250px;'  value=data.pre_url_phone)
+              .form-inline(style='margin-bottom:4px')
+                label
+                  input(type="radio" checked=(data.pre_url_type===2) value=data.user_defined_url data-type=2 name="pre_url_bind")
+                  small(style='margin-right:48px;') 自定义跳转链接：
+                input.form-control(type='text' name="user_defined_url" style='min-width:250px;'  value=data.user_defined_url)
+        .col-sm-5
+          .phoneview
+            .phoneview_body
+              .phoneview-img-show
+                img#phoneview-img-show(src=(data.CDN_DOMAIN + data.picture_path) || '/images/channelAvatar.jpg')
+              .phoneview-title
+                p=data.main_title || '输入主标题'
+                p=data.sub_title || '输入副标题'
+    .modal-footer
+      .col-sm-7.text-center
+        button.btn.btn-default(type="button" data-dismiss="modal") 取消
+        button.btn.btn-primary.col-sm-offset-3.dw_submit
+          span.glyphicon.glyphicon-ok 保存

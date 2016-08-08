@@ -1,0 +1,151 @@
+//-COMPONENT title
+h3 高级绑定
+  span(style='margin-left:20px;font-size:.7em')
+    |#{data.name}
+    span(style='margin-left:20px') ID: #{data.id} 
+    //-span(style='margin-left:20px') 建筑物ID:#{data.buildId}
+//-COMPONENT main
+component title
+hr
+.row(style='margin-bottom:10px')
+  .col-md-12
+    .input-group(style="float:right")
+      component search
+.row(style='margin-bottom:10px')
+  .col-xs-12.dw_toolbar_select_addr
+    label 筛选：
+    component getActivityProvince
+    component getActivityCity
+    component getActivityBuilding
+component table
+component paging
+.row
+  .col-xs-12.dw_toolbar_select_addr
+    label 添加：
+    component common_provinces
+    component common_citys
+    component common_buildings
+    component common_floors
+    .form-group
+      button.btn.btn-default.dw_bind_all 添加该建筑物并绑定到列表
+      button.btn.btn-danger.dw_delete_all(style="margin-left:.7em") 从列表中删除并解绑该建筑物
+.row
+  .col-xs-12
+    .form-inline
+      .form-group
+        input.form-control(name='beaconId' placeholder="请输入微信Id")
+        button.btn.btn-default.dw_bind_one(style="margin-left:.7em") 添加单个beacon并绑定
+        button.btn.btn-danger.dw_delete_one(style="margin-left:.7em") 从列表中解绑
+hr
+//-COMPONENT table
+table.table.table-bordered.text-center
+  thead
+    tr
+      th.text-center 微信ID
+      th.text-center major
+      th.text-center minor
+      th.text-center 省
+      th.text-center 市
+      th.text-center 建筑物
+      th.text-center 楼层
+      th.text-center 状态
+      th.text-center 操作  
+  tbody
+    -arr=['未绑定','已绑定','', '绑定失败', '解绑失败']
+    -arr1=["绑定","解绑","绑定"]
+    each val in data
+      tr
+        td=val.beaconId
+        td=val.major
+        td=val.minor
+        td=val.provinceName
+        td=val.cityName
+        td=val.marketName
+        td=val.floor
+        td=arr[val.beaconStatus]
+        td(beaconId=val.beaconId)
+          case val.beaconStatus
+            when 1
+            when 4
+              a.btn.btn-sm.btn-danger(data-method='unbind') 解绑
+            when 0
+            when 3
+              a.btn.btn-sm.btn-default(data-method='bind') 绑定
+//-COMPONENT getActivityAddr
+select.form-control
+  option(value=-1) 请选择
+  each v in data
+    option(value=v.id)=v.name
+
+//-COMPONENT getActivityBuilding
+select.form-control
+  option(value=-1) 请选择
+  each v in data
+    option(value=v.id)=v.name
+  //-option(value=-2) 无
+
+//-COMPONENT getAllProvince
+select.form-control
+  option(value=-1  selected=true disabled='disabled') --省--
+  each v in data
+    option(value=v.id)=v.name
+//-COMPONENT getAllCity
+select.form-control
+  option(value=-1  disabled='disabled' selected=true) --市--
+  each v in data
+    option(value=v.id)=v.name
+//-COMPONENT getAllBuilding
+select.form-control#getAllBuilding.selectpicker(data-width="fit" data-live-search="true")
+  option(value=-1 selected=true disabled='disabled') --建筑物--
+  each v in data
+    option(value=v.buildId)=v.name
+
+//-COMPONENT getAllFloors
+select.form-control#getAllFloors
+  option(value="全部" ) 全部
+  each v in data
+    option(value=v)=v
+//-form.form-inline
+  .row
+    .col-sm-12.text-left(style="padding:10px 0 10px 10px; background:#eee;")
+      .form-group
+        select.form-control#province
+          option(v-repeat="provinceList" value="{{ id }}")  {{ name }}
+        select.form-control#city
+          option(v-repeat="cityList" value="{{ id }}")  {{ name }}
+        select.form-control.selectpicker#building
+          option(v-repeat="buildingList" value="{{ buildId }}")  {{ name }}
+        select.form-control#floor
+          option(v-repeat="i in bindFloorList" value="{{ i  }}")  {{ i }}
+        .form-group
+          button.btn.btn-default(type="button" v-on="click: handleBuilding(1)")
+            span.glyphicon.glyphicon-search 添加该建筑物并绑定到列表
+          button.btn.btn-default(type="button" v-on="click: handleBuilding(12")
+            span.glyphicon.glyphicon-search 从列表中删除并解绑该建筑物
+      .row(style="padding: 10px 10px 0 0;")
+        .col-sm-12
+          .form-group
+            input.form-control#beaconId(type="text" name="beaconId" placeholder="请输入微信Id")
+            button.btn.btn-default(type="button" v-on="click: handleBeaconId(1)")
+              span.glyphicon.glyphicon-search 添加单个beacon并绑定
+            button.btn.btn-default(type="button" v-on="click: handleBeaconId(2)")
+              span.glyphicon.glyphicon-search 从列表中解绑
+
+
+.modal.fade#change-status-reject
+  form(action="ideaaudit/audit").form-horizontal#change-status-reject-form
+    .modal-dialog
+      .modal-content
+        .modal-header
+          button.close(type="button" data-dismiss="modal" aria-label="Close") &times;
+          h4.modal-title 驳回
+        .modal-body
+          .form-group
+            label.col-sm-2.control-label(for="comment")  理由:
+            .col-sm-10
+              input.form-control(type="text" name="comment" placeholder="驳回原因")
+          input#status(type="hidden" name="status" value="2")
+          input#ids(type="hidden" name="ids" value="") 
+        .modal-footer
+          button.btn.btn-default(type="button" data-dismiss="modal") 关闭
+          button.btn.btn-primary(type="submit") 驳回

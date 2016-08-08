@@ -1,0 +1,73 @@
+//-COMPONENT main
+h3 商场审核
+hr
+//-.row(style='margin-bottom:10px')
+  //-搜索框
+  .col-md-12
+    .input-group(style="float:right")
+      component hybrid_search
+
+.row(style='margin-bottom:10px;')
+  .col-xs-12
+    .dw_toolbar_select_addr
+      component select_is_allcoupon_audit
+      component select_is_auto_audit
+      span(style='margin-right:1em')
+      component select_city
+      component select_market
+      component select_btn
+
+
+
+component table
+component paging
+
+//-COMPONENT table
+table.dw_table.table.table-hover.table-bordered.table-striped
+  thead
+    tr
+      th.text-center 建筑物ID
+      th.text-center 商场名称
+      th.text-center 
+        |自动审核
+      th.text-center 
+        |所有券都要审核
+
+      th.text-center 操作
+  tbody
+    -_arr =['否','是']
+    each v in data
+      tr
+        td=v.build_id
+        td=v.name
+        td=_arr[v.is_auto_audit]
+        td=_arr[v.is_allcoupon_audit]
+        td.dw_small_btn_tags(modelId=v.id)
+          button.btn.btn-sm.btn-info.dw_modify 修改
+
+//-COMPONENT modal
+.modal-dialog
+  .modal-content
+    .modal-header
+      button.close(type='button', data-dismiss='modal', aria-label='Close')
+        span(aria-hidden='true') &times
+      h4.modal-title 修改商场审核类型
+    .modal-body
+      input(type='hidden', name='id' value=data.id)
+      p 自动审核：
+        label.radio-inline
+          input(type='radio', name='is_auto_audit', checked=data.is_auto_audit===0 value='0')
+          |否
+        label.radio-inline
+          input(type='radio', name='is_auto_audit', checked=data.is_auto_audit===1 value='1')
+          |是
+      p 所有券都要审核：
+        label.radio-inline
+          input(type='radio', name='is_allcoupon_audit', checked=data.is_allcoupon_audit===0 value='0')
+          |  否
+        label.radio-inline
+          input(type='radio', name='is_allcoupon_audit', checked=data.is_allcoupon_audit===1 value='1')
+          |  是
+    .modal-footer
+        button.btn.btn-default(type="button" data-dismiss="modal") 取消
+        button.btn.btn-primary.dw_submit(type="button") 确定                             

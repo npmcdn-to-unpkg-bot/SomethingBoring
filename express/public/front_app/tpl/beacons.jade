@@ -1,0 +1,137 @@
+//-COMPONENT main
+h3 beacon管理
+hr
+.row(style='margin-bottom:10px')
+  //-搜索框
+  .col-md-5
+    button.btn.btn-default.dw_batch 批量绑定门店
+    button.btn.btn-default(style="margin-left:2em" onclick="app.reload()")
+      span.glyphicon.glyphicon-refresh
+  .col-md-7
+    .input-group(style="float:right")
+      component param_search
+
+.row(style='margin-bottom:10px;')
+  .col-xs-12
+    .dw_toolbar_select_addr
+      component select_city
+      component select_market
+      component select_shop
+      component select_btn
+component table
+.dw_paging
+  component paging
+component batch_modal
+component modal
+
+//-COMPONENT table
+table.dw_table.table.table-hover.table-bordered.table-striped
+  thead
+    tr
+      th.text-center 微信信息
+      th.text-center MAC
+      th.text-center 商场
+      th.text-center 商户
+      th.text-center 楼层
+      th.text-center 绑定活动ID
+      th.text-center 状态
+      th.text-center 操作
+  tbody
+    each val,i in data
+      tr
+        td
+          |uuid: #{val.uuid} <br> major: #{val.major} <br> minor: #{val.minor} <br> 设备Id: #{val.id}
+        td= val.mac
+        td
+          p=val.marketName
+          p 门店ID:#{val.storeId}
+          p appid:#{val.appId}
+        td= val.shopId!==0 ? val.shopName : ''
+        td= val.floor
+        td 
+          p(style='width:100px; word-break: break-all;') #{val.activityIds}
+        td
+          case val.operState
+            when -1
+              |绑定失败，请重试
+            when 1
+              |操作中
+        td
+          -if(val.operState !== 1)
+            a.btn.btn-info.btn-sm.dw_modify(modelId=val.id) 修改
+
+//-COMPONENT modal
+.form-horizontal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        //-button.close(type="button" data-dismiss="modal" aria-label="Close")
+          span(aria-hidden="true") &times
+        .modal-title beacon信息修改
+      .modal-body
+        .form-horizontal
+          .row
+            .col-sm-12
+              .form-group
+                .col-sm-9.dw_modal_addr
+                  component select_city
+                  component select_market
+                  component select_shop
+              .form-group
+                label.col-sm-3.control-label 微信UUID：
+                .col-sm-9
+                  span(style="vertical-align: -7px")=data.uuid
+              .form-group
+                label.col-sm-3.control-label 微信major：
+                .col-sm-9
+                  span(style="vertical-align: -7px")=data.major
+              .form-group
+                label.col-sm-3.control-label 微信minor：
+                .col-sm-9
+                  span(style="vertical-align: -7px")=data.minor
+              .form-group
+                label.col-sm-3.control-label 关注的微信门店ID:
+                .col-sm-9
+                  input.form-control(name='store_id' value=data.storeId)
+              .form-group
+                label.col-sm-3.control-label 关注的微信appid:
+                .col-sm-9
+                  input.form-control(name='app_id' value=data.appId)
+                
+      .modal-footer
+        button.btn.btn-default.dw_dissmiss 取消
+        button.btn.btn-primary.dw_submit  保存
+
+
+//-COMPONENT batch_modal
+.form-horizontal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        .modal-title 批量绑定门店
+      .modal-body
+        .form-horizontal
+          .row
+            .col-sm-12
+              .form-group
+                .col-sm-9.dw_modal_addr
+                  component cityList
+                  component marketList
+              .form-group
+                label.col-sm-3.control-label 已选beacon总数:
+                .col-sm-9
+                  span(style="color:red;margin:0 10px;vertical-align: -7px")#beacon_total
+                  span(style="vertical-align: -7px") 个
+              br
+              .form-group
+                label.col-sm-3.control-label 关注的微信门店ID:
+                .col-sm-9
+                  input.form-control(name='store_id')
+              .form-group
+                label.col-sm-3.control-label 关注的微信appid:
+                .col-sm-9
+                  input.form-control(name='app_id')
+                
+      .modal-footer
+        button.btn.btn-default.dw_dissmiss 取消
+        button.btn.btn-primary.dw_submit  保存

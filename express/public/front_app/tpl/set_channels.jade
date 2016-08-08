@@ -1,0 +1,130 @@
+//-COMPONENT title
+h3 活动设置渠道
+  span(style='margin-left:20px;font-size:.7em')
+    |#{data.activityName}
+    span(style='margin-left:20px') ID: #{data.activityId} 
+
+//-COMPONENT main
+component title
+hr
+.row(style='margin-bottom:10px')
+  .col-md-4
+    .checkbox.dw_glo_top_checobox
+      label
+        input(type="checkbox")
+        |全选
+  .col-md-8
+    .input-group(style="float:right")
+      component param_search
+.row(style='margin-bottom:10px;')
+  .col-xs-1
+  .col-xs-11
+    .dw_toolbar_select_addr
+      component activity_status
+      component bind_status
+      component select_relevance
+      component select_city
+      component select_market
+      component select_btn
+component table
+hr
+div(style="height:0px;margin-top:-5px")
+  .btn.btn-primary.dw_save 保存
+component paging
+
+
+//-COMPONENT table
+.row
+  .col-sm-12
+    each val,index in data
+      .checkbox.dw_inline
+        label
+          input(type="checkbox" checked=val.in_channel===1)
+          span.badge #{val.id}
+          |#{val.name}
+
+//-table.dw_table.table.table-hover.table-bordered.table-striped
+  thead
+    tr
+      th.text-center 全选
+      th.text-center ID·名称
+      th.text-center ID·名称
+      th.text-center ID·名称
+
+  tbody
+    each val,index in data
+      -console.log('val',val)
+      tr(modelId=val.activityId activityStatus=val.activityStatus)
+        td
+        td #{val.id} #{val.name} #{index}
+
+//-COMPONENT modal
+//-.modal-dialog
+  .modal-content
+    .modal-header
+      button.close(type='button', data-dismiss='modal', aria-label='Close')
+        span(aria-hidden='true') ×
+      h4.modal-title 活动信息修改
+    .modal-body
+      .form-horizontal
+        .row
+          .col-sm-12
+            .form-group
+              label.col-sm-3.control-label * 活动名称：
+              .col-sm-9
+                input.form-control(type='text', required='true', name='activity_name' value=data.activity_name)
+            .form-group
+              label.col-sm-3.control-label * 活动日期：
+              .col-sm-4
+                .input-group
+                  span.input-group-addon
+                    span.glyphicon.glyphicon-calendar
+                  input.form-control.datetimepicker.valid(name='start_date', maxlength='10', data-date-format='yyyy-mm-dd', data-autoclose='1', dateiso='true', type='text', value=data.start_date aria-invalid='false')
+              .col-sm-1(style='width:20px;padding-left:0px;')
+                label.control-label 至
+              .col-sm-4
+                .input-group
+                  span.input-group-addon
+                    span.glyphicon.glyphicon-calendar
+                  input.form-control.datetimepicker.valid(name='end_date', maxlength='10', data-date-format='yyyy-mm-dd', data-autoclose='1', dateiso='true', type='text', value=data.end_date aria-invalid='false')
+            .form-group
+              label.col-sm-3.control-label * 活动时间：
+              .col-sm-9
+                .form-inline
+                  .form-group(v-repeat='times', style='margin-left:0px;')
+                    .input-group.clockpicker(data-align='top', data-autoclose='true',  style='width:100px;')
+                      span.input-group-addon
+                        span.glyphicon.glyphicon-time
+                      input.form-control(type='text', name='start_time' value=data.start_time.substr(0,5))
+                    label &nbsp;&nbsp;至&nbsp;&nbsp;
+                    .input-group.clockpicker(data-align='top', data-autoclose='true', style='width:100px;')
+                      span.input-group-addon
+                        span.glyphicon.glyphicon-time
+                      input.form-control(type='text', name='end_time' value=data.end_time.substr(0,5))
+                  //-.form-group(style='margin-left:30px;', v-show='!modifyLimit.actTime')
+                    button.btn.btn-link(type='button', style='color: #d9534f;')
+                      span.glyphicon.glyphicon-remove
+                  .form-group(style='margin-left:30px; color:red; display:none;')
+                    span.glyphicon.glyphicon-info-sign
+                    |  时间不正确
+            .form-group
+              label.col-sm-3.control-label * 抽奖方式：
+              .col-sm-9
+                label
+                  input(type='radio' name="activity_channel" value=1 checked=data.activity_channel===1)
+                  |ticket抽奖
+                label
+                  input(type='radio' name="activity_channel" value=2 checked=data.activity_channel===2)
+                  |openID抽奖
+            .form-group
+              .col-sm-offset-2.col-sm-10
+                .checkbox
+                  label
+                    input(type='checkbox' name="is_nation_activity" value="1" checked=data.is_nation_activity===1)
+                    |是全国活动
+                  br
+                  small(style="color:#666") *可设置多个渠道(当前只用于红包和免核销的优惠券发放)
+
+    .modal-footer
+      button.btn.btn-default(type='button', data-dismiss='modal') 取消
+      button.btn.btn-primary.dw_modify 保存
