@@ -1,31 +1,49 @@
 const webpack = require('webpack');
+
 module.exports = {
   entry: {
-    vendor: 'jquery',
-    app: './src/app.js'
+    app: './src/app.js',
+    vendor: ['jquery', 'react', 'react-redux', 'redux']
   },
   output: {
-    path: './bin',
-    filename: '[name].bundle.js'
+    path: './src',
+    publicPath: '/bin/',
+    filename: '[name].bundle.js',
+    chunkFilename: '[name].chunk.js'
   },
   module: {
     loaders: [{
-      test: /\.js$/,
+      test: /\.(js|jsx)$/,
       exclude: /node_modules/,
-      loader: 'babel-loader',
-    },
-    { test: /\.css$/, loaders: ["style", "css"] },
-    { test: /\.scss$/, loaders: ["style", "css", "sass"] }
-    ]
+      loaders: [
+        'react-hot',
+        'babel-loader'
+      ]
+    }, 
+    {
+      test: /\.css$/,
+      loaders: ["style", "css"]
+    }, {
+      test: /\.scss$/,
+      loaders: ["style", "css", "sass"]
+    }]
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        warnings: false,
-      },
-      output: {
-        comments: false,
-      },
-    })
-  ]
+    new webpack.optimize.DedupePlugin(),
+    new webpack.DefinePlugin({
+      'ENV': process.env.NODE_ENV || 'development'
+    }),
+    new webpack.optimize.CommonsChunkPlugin('vendor', 'vendor.bundle.js')  
+    /*    new webpack.optimize.UglifyJsPlugin({
+          compress: {
+            warnings: false,
+          },
+          output: {
+            comments: false,
+          },
+        })*/
+  ],
+  devServer: {
+    hot: true
+  }
 };
