@@ -1,4 +1,4 @@
-require('../css/style.scss');
+require('./css/style.scss');
 import $ from 'jquery';
 import Appwww from './cmpt/cats.jsx';
 /*require(['./cats'], function(cats){
