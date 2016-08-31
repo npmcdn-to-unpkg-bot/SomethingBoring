@@ -49,7 +49,7 @@ if (isPro) {
 module.exports = {
   context: path.join(__dirname, './src'),
   entry: {
-    app: "./index.js",
+    app: "./index",
     vendor: [
       'react',
       'react-dom',
