@@ -5,24 +5,27 @@ var path = require('path');
 
 
 var isPro = process.env.NODE_ENV === 'production';
-
-var cssLoaderConf = 'modules&sourceMap&importLoaders=1&localIdentName=[local]___[hash:base64:5]';
 var bundle_name = '[name]_bundle.js';
 var chunk_name = '[name]_chunk.js';
-var index_path = '/dist/index.html';
+var index_path = '/index.html';
 
-if(isPro){
-  cssLoaderConf = 'modules&importLoaders=1&localIdentName=[local]___[hash:base64:5]';
+if (isPro) {
   bundle_name = '[name]_bundle_[chunkhash].js';
   chunk_name = '[name]_chunk_[chunkhash].js';
+  index_path = '/dist/index.html';
 }
-
+// plugins
 var plugins = [
+  new webpack.optimize.DedupePlugin(),
+  new webpack.ProvidePlugin({
+    React : 'react'
+  }),
   new webpack.optimize.CommonsChunkPlugin("vendor", bundle_name),
   new webpack.DefinePlugin({
     'IS_PRO': isPro
   }),
   new HtmlWebpackPlugin({
+    favicon: path.join(__dirname, 'favicon.ico'),
     filename: path.join(__dirname, index_path),
     template: path.join(__dirname, '/src/index.ejs')
   })
@@ -41,13 +44,13 @@ if (isPro) {
     }));
 };
 
+// conf
 
 module.exports = {
   context: path.join(__dirname, './src'),
   entry: {
     app: "./index.js",
     vendor: [
-      'jquery',
       'react',
       'react-dom',
       'react-redux',
@@ -58,10 +61,19 @@ module.exports = {
   },
   output: {
     path: './dist',
+    publicPath: '/',
     filename: bundle_name,
     chunkFilename: chunk_name
   },
   module: {
+    preLoaders: [
+        {
+          test: /\.(js|jsx)$/,
+          loader: 'eslint-loader',
+          include: [path.resolve(__dirname, "src")],
+          exclude: [/(node_modules|bower_components|jquery|lodash|querystring|galaxy|checkin|cookie|hogan|bootstrap)/] // galaxy|checkin 历史代码
+        }
+    ],
     loaders: [{
       test: /\.(js|jsx)$/,
       exclude: /node_modules/,
@@ -71,7 +83,12 @@ module.exports = {
       ]
     }, {
       test: /\.scss$/,
-      loaders: ["style", "css?" + cssLoaderConf, "postcss", "sass"]
+      loaders: [
+        "style",
+        "css?modules&importLoaders=1&localIdentName=[local]___[hash:base64:5]",
+        "postcss",
+        "sass"
+      ]
     }]
   },
   resolve: {
@@ -84,7 +101,6 @@ module.exports = {
   ],
   plugins: plugins,
   devServer: {
-    contentBase: './dist',
     hot: true
   }
 };

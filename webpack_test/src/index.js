@@ -1,12 +1,24 @@
-require('./css/style.scss');
-import $ from 'jquery';
-import Appwww from './cmpt/cats.jsx';
-/*require(['./cats'], function(cats){
-  //var cats = require('./cats');
-  console.log('cats', cats);
-   $('<h1>Cats</h1>').appendTo('body');
-   const ul = $('<ul></ul>').appendTo('body');
-   for (const cat of cats) {
-       $('<li></li>').text(cat).appendTo(ul);
-   }
-});*/
+import ReactDOM from 'react-dom'
+import { createStore, combineReducers } from 'redux'
+import { Provider } from 'react-redux'
+import { Router, Route, browserHistory } from 'react-router'
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+
+import style from './css/style.scss'
+import reducers from './reducers'
+import routerConf from './router'
+
+const store = createStore(
+  combineReducers({
+    ...reducers,
+    routing: routerReducer
+  })
+)
+const history = syncHistoryWithStore(browserHistory, store)
+
+ReactDOM.render(
+  <Provider store={store}>
+    <Router history={history} routes={routerConf} />
+  </Provider>,
+  document.getElementById('root')
+)

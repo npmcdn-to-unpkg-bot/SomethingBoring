@@ -1,9 +1,27 @@
-import React, { Component } from 'react'
-import ReactDOM from 'react-dom'
-var HelloMessage = React.createClass({
-  render: function() {
-    return <div>Hello {this.props.name}</div>;
-  }
-});
+import { Component } from 'react'
+import { Router, Route, Link } from 'react-router'
+export class Index extends Component {
+  render() {
+    return (
+      <div>
+      <h1>App</h1>
 
-ReactDOM.render(<HelloMessage name="John" />, document.getElementById('root'));
+      <ul>
+        <li><Link to="/about">About</Link></li>
+      </ul>
+
+      {this.props.children}
+      </div>
+
+    )
+  }
+}
+
+export class About extends Component {
+  render() {
+    return (
+      <div>About
+      </div>
+    )
+  }
+}
