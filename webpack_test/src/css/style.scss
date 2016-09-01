@@ -9,11 +9,12 @@ $leftAHeight:35px;
 
 *{margin: 0; padding: 0;box-sizing: border-box;}
 :global {
-  html , body, #app, #root{height: 100%;}
+  html , body, .height100{height: 100%;}
 }
 body{font-family:'微软雅黑';line-height: 1.5}
 ul, ol { list-style: none; }
 a { text-decoration: none;cursor:pointer;}
+.homeTitle{position: absolute; top:0; bottom:0; width: 100%; text-align: center; font-size: 100px;margin: auto; height: 200px;line-height: 200px;}
 .topNavWarp{padding-left: $leftWidth;height:$topH;line-height: $topH;position: fixed; top:0;
   font-size:1.2em;
   left:0;z-index: 2;width: 100%; background-color:$topColor;color:$color;}
@@ -22,7 +23,7 @@ a { text-decoration: none;cursor:pointer;}
 .topNav a{color:$color; display: block;float: left; margin:0 10px;padding: 0 20px}
 .topNav a.active, .topNav a:hover{background: $leftColor}
 
-.bottomWarp{padding-top:$topH;height: 100%;}
+.bottomWarp{padding-top:$topH;height: 100%;position: relative;}
 
 .mainWarp{padding-left:$leftWidth;width:100%; position: relative; height: 100%;}
 .main{height: 100%;width: 100%;padding:10px}
