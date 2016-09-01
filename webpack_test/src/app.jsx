@@ -9,7 +9,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
 import reducers from './reducers';
-import routerConf from './router';
+import AppRoutes from './router.jsx';
 
 const store = createStore(
   combineReducers({
@@ -22,7 +22,9 @@ const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history} routes={routerConf} />
+    <Router history={history} >
+    {AppRoutes}
+    </Router>
   </Provider>,
-  document.getElementById('root')
+  document.getElementById('app')
 );

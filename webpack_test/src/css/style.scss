@@ -1,8 +1,32 @@
-$mainColor2 : red;
-*{margin: 0; padding: 0}
-html , body{height: 100%}
+$color:#fff;
+$topColor:#000;
+$leftColor:#888;
+$midColor:#444;
+$midColor2:#ccc;
+$topH : 50px;
+$leftWidth:200px;
+$leftAHeight:35px;
+
+*{margin: 0; padding: 0;box-sizing: border-box;}
 :global {
-  #root{height: 100%; background-color: #fff}
+  html , body, #app, #root{height: 100%;}
 }
-h1{text-align: center;}
-ul{width: 200px;padding:20px;}
+body{font-family:'微软雅黑';line-height: 1.5}
+ul, ol { list-style: none; }
+a { text-decoration: none;cursor:pointer;}
+.topNavWarp{padding-left: $leftWidth;height:$topH;line-height: $topH;position: fixed; top:0;
+  font-size:1.2em;
+  left:0;z-index: 2;width: 100%; background-color:$topColor;color:$color;}
+.title{left: 10px;color:$midColor2;position: absolute; display: block;font-size:1.2em;}
+.topNav{padding-left: 20px}
+.topNav a{color:$color; display: block;float: left; margin:0 10px;padding: 0 20px}
+.topNav a.active, .topNav a:hover{background: $leftColor}
+
+.bottomWarp{padding-top:$topH;height: 100%;}
+
+.mainWarp{padding-left:$leftWidth;width:100%; position: relative; height: 100%;}
+.main{height: 100%;width: 100%;padding:10px}
+.leftNav{width: $leftWidth;height: 100%;position: fixed;top:$topH;left:0;z-index: 2;padding-top: 10px;
+background-color: $leftColor}
+.leftNav a{color:$topColor;display: block; height: $leftAHeight;line-height: $leftAHeight;padding-left:10px;}
+.leftNav a.active, .leftNav a:hover{background-color: $color;color:$topColor}
