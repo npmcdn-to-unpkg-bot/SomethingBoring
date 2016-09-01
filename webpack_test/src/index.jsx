@@ -10,10 +10,15 @@ import routerConf from './router';
 
 const store = createStore(
   combineReducers({
-      ...reducers,
-      routing: routerReducer
+    ...reducers,
+    routing: routerReducer
   })
 );
+const test = {
+  ...reducers
+};
+console.log('test', test);
+
 const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(

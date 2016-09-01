@@ -1,5 +1,5 @@
-import { Component } from 'react'
-import { Router, Route, Link } from 'react-router'
+import { Component } from 'react';
+import { Link } from 'react-router';
 export class Index extends Component {
   render() {
     return (
@@ -12,8 +12,7 @@ export class Index extends Component {
 
       {this.props.children}
       </div>
-
-    )
+    );
   }
 }
 
@@ -22,6 +21,6 @@ export class About extends Component {
     return (
       <div>About
       </div>
-    )
+    );
   }
 }
