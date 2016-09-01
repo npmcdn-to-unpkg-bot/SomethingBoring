@@ -22,7 +22,7 @@ const history = syncHistoryWithStore(browserHistory, store);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={history} >
+    <Router history={history}>
     {AppRoutes}
     </Router>
   </Provider>,
