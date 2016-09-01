@@ -1,3 +1,4 @@
 /sas/*.db
 /express/node_modules
 /webpack_test/node_modules
+/webpack_test/dist

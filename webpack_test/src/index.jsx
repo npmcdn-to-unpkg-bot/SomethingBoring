@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
-import { browserHistory } from 'react-router';
+import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 
 //import from './css/style.scss';
@@ -10,14 +10,10 @@ import routerConf from './router';
 
 const store = createStore(
   combineReducers({
-    ...reducers,
+    reducers,
     routing: routerReducer
   })
 );
-const test = {
-  ...reducers
-};
-console.log('test', test);
 
 const history = syncHistoryWithStore(browserHistory, store);
 

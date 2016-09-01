@@ -61,7 +61,7 @@ module.exports = {
   },
   output: {
     path: './dist',
-    publicPath: '/',
+    publicPath: '/dist',
     filename: bundle_name,
     chunkFilename: chunk_name
   },
