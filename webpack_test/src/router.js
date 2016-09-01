@@ -1,7 +1,7 @@
-import * as cmpt from './cmpt/cats.jsx';
+import * as cmpt from './cmpt/common.jsx';
 export default {
   path: '/',
-  component: cmpt.Index,
+  component: cmpt.Layout,
   childRoutes: [
     { path: '/about', component: cmpt.About },
   ]

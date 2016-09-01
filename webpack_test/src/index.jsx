@@ -3,8 +3,11 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import { Router, browserHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
 
-//import from './css/style.scss';
 import reducers from './reducers';
 import routerConf from './router';
 

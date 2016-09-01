@@ -2,6 +2,7 @@ $mainColor2 : red;
 *{margin: 0; padding: 0}
 html , body{height: 100%}
 :global {
-  #root{height: 100%; background-color: #eee}
+  #root{height: 100%; background-color: #fff}
 }
-h1{color: $mainColor2;}
+h1{text-align: center;}
+ul{width: 200px;padding:20px;}

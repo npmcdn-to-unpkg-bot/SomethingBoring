@@ -22,7 +22,8 @@ var plugins = [
   }),
   new webpack.optimize.CommonsChunkPlugin("vendor", bundle_name),
   new webpack.DefinePlugin({
-    'IS_PRO': isPro
+    'IS_PRO': isPro,
+    'process.env.NODE_ENV': process.env.NODE_ENV
   }),
   new HtmlWebpackPlugin({
     favicon: path.join(__dirname, 'favicon.ico'),
@@ -71,7 +72,7 @@ module.exports = {
           test: /\.(js|jsx)$/,
           loader: 'eslint-loader',
           include: [path.resolve(__dirname, "src")],
-          exclude: [/(node_modules|bower_components|jquery|lodash|querystring|galaxy|checkin|cookie|hogan|bootstrap)/] // galaxy|checkin 历史代码
+          exclude: [/(node_modules|bower_components)/] // galaxy|checkin 历史代码
         }
     ],
     loaders: [{
