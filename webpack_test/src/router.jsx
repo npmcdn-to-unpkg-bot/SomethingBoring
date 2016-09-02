@@ -1,11 +1,15 @@
-import * as cmpt from './cmpt/common.jsx';
+import * as layout from './cmpt/layout.jsx';
+import {LoginBox} from './cmpt/login.jsx';
 import { Route, IndexRoute} from 'react-router';
 export default (
-  <Route path="/" component={cmpt.Root}>
-    <Route component={cmpt.Master}>
-      <IndexRoute component={cmpt.Home}/>
-      <Route path="env" component={cmpt.Bottom}>
-        <Route path="about" component={cmpt.About}/>
+  <Route path="/" component={layout.Root}>
+    <Route path="/login" component={LoginBox}/>
+    <Route component={layout.Top}>
+      <IndexRoute component={layout.Home}/>
+      <Route onEnter={layout.Top.isLogin}>
+        <Route path="env" component={layout.Left}>
+          <Route path="about" component={layout.About}/>
+        </Route>
       </Route>
     </Route>
   </Route>

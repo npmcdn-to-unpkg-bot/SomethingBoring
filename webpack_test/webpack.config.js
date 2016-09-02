@@ -54,10 +54,10 @@ module.exports = {
     vendor: [
       'react',
       'react-dom',
-      'react-redux',
       'react-router',
-      'react-router-redux',
-      'redux'
+      'redux',
+      'react-redux',
+      //'react-router-redux',
     ]
   },
   output: {

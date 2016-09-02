@@ -1,15 +1,43 @@
 import { Component } from 'react';
 import { Link } from 'react-router';
 import style from '../css/style.scss';
+import userStore from '../store/user';
+import {LoginBar} from './login.jsx';
+import {Provider} from 'react-redux';
 
-//import getMuiTheme from 'material-ui/styles/getMuiTheme'; , PropTypes
-//import {darkWhite, lightWhite, grey900} from 'material-ui/styles/colors';
-//import AppBar from 'material-ui/AppBar';
-export class Root extends Component {
+export class Root extends Component {//一个虚类，容器为：整个屏幕
   render() {
     return (
       <div className='height100'>
         {this.props.children}
+      </div>
+    );
+  }
+}
+
+export class Top extends Component {//出现上导航，容器为：上导航以下。
+  static isLogin(nextState, replace){
+    if(!userStore.getState()){
+      replace('/login');
+    }
+  }
+  render() {
+    return (
+      <div className='height100'>
+        <div className={style.topNavWarp}>
+          <Link className={style.title} to="/">clear前端架构</Link>
+          <div className={style.topNav}>
+            <Link to="/env" activeClassName={style.active}>环境</Link>
+            <Link to="/React">React</Link>
+            <Link to="/cmpt">组件库</Link>
+          </div>
+          <Provider store={userStore}>
+            <LoginBar />
+          </Provider>
+        </div>
+        <div className={style.bottomWarp}>
+          {this.props.children}
+        </div>
       </div>
     );
   }
@@ -23,35 +51,7 @@ export class Home extends Component {
   }
 }
 
-export class Master extends Component {
-  render() {
-    return (
-      <div className='height100'>
-        <div className={style.topNavWarp}>
-          <Link className={style.title} to="/">rtmap前端架构</Link>
-          <div className={style.topNav}>
-            <Link to="/env" activeClassName={style.active}>环境</Link>
-            <Link to="/React">React</Link>
-            <Link to="/cmpt">组件库</Link>
-          </div>
-        </div>
-        <div className={style.bottomWarp}>
-          {this.props.children}
-        </div>
-      </div>
-    );
-  }
-}
-
-export class About extends Component {
-  render() {
-    return (
-      <div>About</div>
-    );
-  }
-}
-
-export class Bottom extends Component {
+export class Left extends Component {
   render() {
     return (
       <div>
@@ -64,6 +64,14 @@ export class Bottom extends Component {
           </div>
         </div>
       </div>
+    );
+  }
+}
+
+export class About extends Component {
+  render() {
+    return (
+      <div>About</div>
     );
   }
 }
